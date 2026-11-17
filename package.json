@@ -1,0 +1,23 @@
+{
+  "name": "playwright-qa-demo",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript QA demo: UI and API tests, page objects, smoke/regression tags, CI",
+  "scripts": {
+    "test": "playwright test",
+    "smoke": "playwright test --grep @smoke",
+    "regression": "playwright test --grep @regression",
+    "api": "playwright test --project=api",
+    "typecheck": "tsc -p .",
+    "report": "playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  },
+  "private": true
+}

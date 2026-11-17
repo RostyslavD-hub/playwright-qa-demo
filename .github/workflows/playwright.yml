@@ -1,0 +1,35 @@
+name: Playwright tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1-5' # weekday morning run: catches changes in the apps under test
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Type check
+        run: npx tsc -p .
+      - name: Smoke (fast gate)
+        run: npx playwright test --grep @smoke
+      - name: Regression
+        if: success()
+        run: npx playwright test --grep @regression --project=api --project=desktop-chrome
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
